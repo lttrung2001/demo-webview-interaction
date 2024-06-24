@@ -5,9 +5,11 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.webkit.JavascriptInterface
+import android.webkit.ValueCallback
 import android.webkit.WebMessage
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import vn.trunglt.demowebviewinteraction.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         binding.wv.apply {
             webViewClient = client
             settings.javaScriptEnabled = true
-            loadUrl("https://badc-118-69-157-71.ngrok-free.app/")
+            loadUrl("https://4869-113-161-59-211.ngrok-free.app/")
             addJavascriptInterface(MyJsInterface(), "AndroidInterface")
         }
     }
@@ -36,12 +38,14 @@ class VinacapitalClient(private val webView: WebView): WebViewClient() {
         super.onPageFinished(view, url)
         println("Done!")
         val jsCode = "fillData('Hello world')"
-        webView.evaluateJavascript(jsCode, null)
+        webView.evaluateJavascript(jsCode) {
+            Toast.makeText(webView.context, it, Toast.LENGTH_LONG).show()
+        }
 //        val moreJsCode = "fillData('Hehe')"
         val moreJsCode = "function showAlertHello('Hello world') { alert('This function is written by Android!'); }"
         webView.loadUrl("javascript:${moreJsCode}")
-        val webMessage = WebMessage("")
-        webView.postWebMessage()
+//        val webMessage = WebMessage("")
+//        webView.postWebMessage()
     }
 }
 
